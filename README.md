@@ -34,3 +34,5 @@ It is extended for the following uses:
 - `Sustainable AI computing` to reduce carbon footprint for AI workloads
 
 ![](docs/cnap-uses.png)
+
+for test
