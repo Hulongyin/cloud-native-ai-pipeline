@@ -11,6 +11,8 @@ Classes:
 """
 import os
 from typing import Tuple
+import logging
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -21,6 +23,8 @@ from core.processors.preprocessor import Preprocessor
 from core.processors.postprocessor import Postprocessor, \
     FaceRecognitionPostprocessor, ObjectDetectionPostprocessor
 from core.metrics import MetricsManager, MetricType
+
+LOG = logging.getLogger(__name__)
 
 # pylint: disable=no-member
 
@@ -152,6 +156,26 @@ class TensorFlowPreprocessor(Preprocessor):
         self._input_size = input_size
         self._dtype = dtype
 
+        config = tf.compat.v1.ConfigProto()
+        self.preprocess_graph = tf.Graph()
+        preprosessor_model = "/cnap/core/engines/ssdmobilenet_preprocess.pb"
+
+        LOG.info('load preprocess_graph from: ' + preprosessor_model)
+        with self.preprocess_graph.as_default():
+            graph_def = tf.compat.v1.GraphDef()
+            with tf.compat.v1.gfile.FastGFile(preprosessor_model, 'rb') as input_file:
+                input_graph_content = input_file.read()
+                graph_def.ParseFromString(input_graph_content)
+            tf.import_graph_def(graph_def, name='')
+        
+        # build preprocessor session
+        self.pre_sess = tf.compat.v1.Session(
+            graph=self.preprocess_graph, config=config)
+        self.pre_output = self.preprocess_graph.get_tensor_by_name(
+            "Preprocessor/sub:0")
+        self.pre_input = self.preprocess_graph.get_tensor_by_name(
+            "image_tensor:0")
+
     def preprocess(self, frame: np.ndarray) -> np.ndarray:
         """Implement the preprocess method for TensorFlow models.
 
@@ -173,7 +197,19 @@ class TensorFlowPreprocessor(Preprocessor):
 
         input_tensor = tf.convert_to_tensor(batch_frame, dtype=tf.as_dtype(self._dtype))
 
-        return input_tensor.numpy()
+        # return input_tensor.numpy()
+
+        start = time.time()
+        input_image = input_tensor.numpy()
+
+        with self.preprocess_graph.as_default():
+            input_image = self.pre_sess.run(
+                self.pre_output, {self.pre_input: input_image})
+        end = time.time()
+        LOG.info("Preprocess time: %fms", (end - start) * 1000)
+        return input_image
+
+
 
 class TensorFlowPostprocessor(Postprocessor):
     """A class for postprocessing output data for TensorFlow models.

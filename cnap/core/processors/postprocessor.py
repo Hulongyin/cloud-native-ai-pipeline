@@ -78,12 +78,16 @@ class ObjectDetectionPostprocessor(Postprocessor):
             if self._drawing.get('draw_boxes'):
                 boxes = outputs['detection_boxes']
                 labels = outputs['detection_classes']
+                # scores = outputs['detection_scores']
+                # for box, label, score in zip(boxes[0], labels[0], scores[0]):
                 for box, label in zip(boxes[0], labels[0]):
                     x1, y1 = int(box[1] * frame.shape[1]), int(box[0] * frame.shape[0])
                     x2, y2 = int(box[3] * frame.shape[1]), int(box[2] * frame.shape[0])
+                    # if CategoryList[label] == 'person' and score > 0.15:
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
                     cv2.putText(frame, CategoryList[label], (x1, y1),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                    break
             return frame
         except KeyError as e:
             raise KeyError(f"Missing key in outputs: {str(e)}") from e
