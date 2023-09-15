@@ -3,7 +3,7 @@
     <div style="width: 100%;" v-if="store.state.pipelines.length != 0">
       <el-row>
         <el-col v-for="(o, index) in store.state.pipelines.length" :key="o" style="height:50% ;">
-          <div class="stream-card">
+          <div v-if="index == 0" class="stream-card-secure">
               <DetailView
                 :pipeline_id="store.state.pipelines[index].pipeline_id"
                 :stream_name="store.state.pipelines[index].stream_name"
@@ -12,8 +12,21 @@
                 :infer_fps="store.state.pipelines[index].infer_fps"
                 :stream_url="store.state.stream_urls[index]"
                 :now_time="store.state.now_time"
+                :is_secure="1"
                 />
-            </div>
+          </div>
+          <div v-else class="stream-card">
+              <DetailView
+                :pipeline_id="store.state.pipelines[index].pipeline_id"
+                :stream_name="store.state.pipelines[index].stream_name"
+                :model_name="store.state.pipelines[index].model_name"
+                :input_fps="store.state.pipelines[index].input_fps"
+                :infer_fps="store.state.pipelines[index].infer_fps"
+                :stream_url="store.state.stream_urls[index]"
+                :now_time="store.state.now_time"
+                :is_secure="0"
+                />
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -57,6 +70,18 @@ onUnmounted(() => {
   border: 3px;
   background-color:azure;
   border-style: dashed;
+}
+
+.stream-card-secure {
+  height: 100%;
+  width: 98%;
+  margin: 5px;
+  padding: 5px;
+  display: block;
+  border: 10px;
+  background-color:azure;
+  border-style: dashed;
+  border-color: red;
 }
 
 .image {

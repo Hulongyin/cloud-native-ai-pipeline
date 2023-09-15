@@ -1,5 +1,5 @@
 <template>
-    <div class="stream-card">
+    <div class="stream-card1">
         <div class="stream-view">
             <div class="stream-name">
                 <h3>{{ streamTitle }}</h3>
@@ -68,7 +68,7 @@ const connectWebsocketServer = () => {
         const time_now : number = new Date().getTime();
         const s2i_latency = (frame.tsInferEnd - frame.tsNew) * 1000;
         const i2u_latency = time_now - frame.tsInferEnd * 1000;
-        const latency: Latency = {s2i_latency: s2i_latency, 
+        const latency: Latency = {s2i_latency: s2i_latency,
                                    i2u_latency: i2u_latency};
         emit("onReceiveMsg", latency);
     }
@@ -109,5 +109,12 @@ onUnmounted(() => {
     .stream-view {
         height: 100%;
         width: 100%;
+    }
+
+    .stream-card1 {
+        width: 400px;
+        margin: 5px;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size: large;
     }
 </style>

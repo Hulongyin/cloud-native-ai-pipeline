@@ -2,7 +2,18 @@
     <div class="dashboard-container">
       <div v-if="store.state.pipelines.length != 0" class="dashboard-container">
         <div v-for="(o, index) in store.state.pipelines.length" :key="o">
-          <el-card class="stream-card" :body-style="{ padding: '10px' }">
+          <el-card v-if="index == 0" class="stream-card-secure" :body-style="{ padding: '10px' }">
+            <div>
+              <StreamView style="width: 90%; height: 90%; padding: 10px"
+                :stream="{name: store.state.pipelines[index].stream_name,
+                         url: store.state.stream_urls[index]}"
+                />
+            </div>
+            <div style="padding: 14px">
+              <span>{{ store.state.pipelines[index]['pipeline_id'] }}</span>
+            </div>
+          </el-card>
+          <el-card v-else class="stream-card" :body-style="{ padding: '10px' }">
             <div>
               <StreamView style="width: 90%; height: 90%; padding: 10px"
                 :stream="{name: store.state.pipelines[index].stream_name,
@@ -49,11 +60,23 @@ onUnmounted(() => {
   min-height: 600px;
 }
 
+.stream-card-secure {
+  width: 400px;
+  margin: 5px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: large;
+  background-color:azure;
+  border-style: dashed;
+  border-color: red;
+}
+
 .stream-card {
   width: 400px;
   margin: 5px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size: large;
+  background-color:azure;
+  border-style: dashed;
 }
 
 .time {

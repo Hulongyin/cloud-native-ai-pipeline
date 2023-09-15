@@ -84,6 +84,72 @@
       </div>
     </el-col>
   </el-row>
+  <div v-if="is_secure == 1">
+    <el-row :gutter="20" class="line-item">
+      <el-col :span="4">
+        <div style="text-align: left;">
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div style="text-align: left;">
+          <el-text size="large">RTMR[0]</el-text>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div style="text-align: left;">
+          <el-text size="large">{{ rtmr_0 }}</el-text>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="line-item">
+      <el-col :span="4">
+        <div style="text-align: left;">
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div style="text-align: left;">
+          <el-text size="large">RTMR[1]</el-text>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div style="text-align: left;">
+          <el-text size="large">{{ rtmr_1 }}</el-text>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="line-item">
+      <el-col :span="4">
+        <div style="text-align: left;">
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div style="text-align: left;">
+          <el-text size="large">RTMR[2]</el-text>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div style="text-align: left;">
+          <el-text size="large">{{ rtmr_2 }}</el-text>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="line-item">
+      <el-col :span="4">
+        <div style="text-align: left;">
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div style="text-align: left;">
+          <el-text size="large">RTMR[3]</el-text>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div style="text-align: left;">
+          <el-text size="large">{{ rtmr_3 }}</el-text>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -120,8 +186,34 @@ const props = defineProps({
   now_time: {
     type: String,
     default: ""
-  }
+  },
+  is_secure: {
+    type: Number,
+    default: 1
+  },
+  rtmr_0: {
+    type: String,
+    default: "095a7840b11b4a90195f4c83132cb316db265496ecfb1a0146e6e74f2c1009a2ac3634da12d2b7e22e661a5ec7df5bc5"
+  },
+  rtmr_1: {
+    type: String,
+    default: "1c702cbdb8a74442df94e8df701127b0fb31eb5cfe5237ecde6e353f6546b94098c90fb944e1522b320941eb99b7c805"
+  },
+  rtmr_2: {
+    type: String,
+    default: "0fdcd44ab078d6693bdb44ff19c579f4b411bac832ed54a768d9ba17e01ba9b9a96df4e0b45ac26bbf8361dcb056bbb9"
+  },
+  rtmr_3: {
+    type: String,
+    default: "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  },
 });
+
+const is_secure = props.is_secure;
+const rtmr_0 = props.rtmr_0;
+const rtmr_1 = props.rtmr_1;
+const rtmr_2 = props.rtmr_2;
+const rtmr_3 = props.rtmr_3;
 
 const max_points = 5;
 
