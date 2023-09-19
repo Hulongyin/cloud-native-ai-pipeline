@@ -45,6 +45,7 @@ export const initStore = (app: App<Element>) => {
 
 let eventSource: EventSource | null = null;
 let retries = 0;
+const reg=/sec/;
 
 export const refreshPipeline = async (pipeline_db_url:string=store.state.pipeline_db_server,
     ws_server_url:string=store.state.websocket_server,
@@ -58,9 +59,17 @@ export const refreshPipeline = async (pipeline_db_url:string=store.state.pipelin
 
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
+    let data_new = [];
     let urls = [];
     for (let pipeline of data) {
-      urls.push(ws_server_url + "/" + pipeline.pipeline_id);
+      if (reg.test(pipeline.stream_name)) {
+        console.log(pipeline.stream_name)
+        urls.unshift(ws_server_url + "/" + pipeline.pipeline_id);
+        data_new.unshift(pipeline);
+      } else {
+        urls.push(ws_server_url + "/" + pipeline.pipeline_id);
+        data_new.push(pipeline);
+      }
     }
 
     let date = new Date(Date.parse(new Date().toString()));
@@ -70,7 +79,7 @@ export const refreshPipeline = async (pipeline_db_url:string=store.state.pipelin
       'db_server': pipeline_db_url,
       'ws_server': ws_server_url,
       'gf_server': gf_server_url,
-      'pipelines': data,
+      'pipelines': data_new,
       'urls': urls,
       'now_time': now_time
     });
