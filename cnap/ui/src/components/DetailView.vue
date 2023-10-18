@@ -85,70 +85,72 @@
     </el-col>
   </el-row>
   <div v-if="is_secure == 1">
-    <el-row :gutter="20" class="line-item">
-      <el-col :span="4">
-        <div style="text-align: left;">
-        </div>
-      </el-col>
-      <el-col :span="2">
-        <div style="text-align: left;">
-          <el-text size="large">RTMR[0]</el-text>
-        </div>
-      </el-col>
-      <el-col :span="17">
-        <div style="text-align: left;">
-          <el-text size="large">{{ rtmr_0 }}</el-text>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="line-item">
-      <el-col :span="4">
-        <div style="text-align: left;">
-        </div>
-      </el-col>
-      <el-col :span="2">
-        <div style="text-align: left;">
-          <el-text size="large">RTMR[1]</el-text>
-        </div>
-      </el-col>
-      <el-col :span="17">
-        <div style="text-align: left;">
-          <el-text size="large">{{ rtmr_1 }}</el-text>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="line-item">
-      <el-col :span="4">
-        <div style="text-align: left;">
-        </div>
-      </el-col>
-      <el-col :span="2">
-        <div style="text-align: left;">
-          <el-text size="large">RTMR[2]</el-text>
-        </div>
-      </el-col>
-      <el-col :span="17">
-        <div style="text-align: left;">
-          <el-text size="large">{{ rtmr_2 }}</el-text>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="line-item">
-      <el-col :span="4">
-        <div style="text-align: left;">
-        </div>
-      </el-col>
-      <el-col :span="2">
-        <div style="text-align: left;">
-          <el-text size="large">RTMR[3]</el-text>
-        </div>
-      </el-col>
-      <el-col :span="17">
-        <div style="text-align: left;">
-          <el-text size="large">{{ rtmr_3 }}</el-text>
-        </div>
-      </el-col>
-    </el-row>
+    <div class="grid-content">
+      <el-row :gutter="20" class="line-item">
+        <el-col :span="4">
+          <div style="text-align: left;">
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div style="text-align: left;">
+            <el-text size="large">RTMR[0]</el-text>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div style="text-align: left;">
+            <el-text size="large">{{ rtmr_0 }}</el-text>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="line-item">
+        <el-col :span="4">
+          <div style="text-align: left;">
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div style="text-align: left;">
+            <el-text size="large">RTMR[1]</el-text>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div style="text-align: left;">
+            <el-text size="large">{{ rtmr_1 }}</el-text>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="line-item">
+        <el-col :span="4">
+          <div style="text-align: left;">
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div style="text-align: left;">
+            <el-text size="large">RTMR[2]</el-text>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div style="text-align: left;">
+            <el-text size="large">{{ rtmr_2 }}</el-text>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="line-item">
+        <el-col :span="4">
+          <div style="text-align: left;">
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div style="text-align: left;">
+            <el-text size="large">RTMR[3]</el-text>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div style="text-align: left;">
+            <el-text size="large">{{ rtmr_3 }}</el-text>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 

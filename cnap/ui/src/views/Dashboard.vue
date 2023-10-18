@@ -2,7 +2,7 @@
     <div class="dashboard-container">
       <div v-if="store.state.pipelines.length != 0" class="dashboard-container">
         <div v-for="(o, index) in store.state.pipelines.length" :key="o">
-          <el-card v-if="index == 0" class="stream-card-secure" :body-style="{ padding: '10px' }">
+          <el-card v-if="index >= 0" class="stream-card-secure" :body-style="{ padding: '10px' }">
             <div>
               <StreamView style="width: 90%; height: 90%; padding: 10px"
                 :stream="{name: store.state.pipelines[index].stream_name,
