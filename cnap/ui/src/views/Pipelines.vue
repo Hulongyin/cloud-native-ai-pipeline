@@ -12,7 +12,7 @@
                 :infer_fps="Math.min(store.state.pipelines[index].infer_fps, store.state.pipelines[index].input_fps)"
                 :stream_url="store.state.stream_urls[index]"
                 :now_time="store.state.now_time"
-                :="1"
+                :is_secure="1"
                 />
           </div>
           <div v-else-if="index == 1" class="stream-card-secure">
