@@ -8,71 +8,119 @@
            />
         </div>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="16">
       <div class="grid-content">
         <el-row :gutter="20" class="line-item">
-            <el-col  :span="5">
+          <el-col  :span="5">
+            <div style="text-align: left;">
+              <el-text size="large">Pipeline ID</el-text>
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <div style="text-align: left;">
+              {{ pipeline_id }}
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="line-item">
+          <el-col :span="5">
+            <div style="text-align: left;">
+              <el-text size="large">Model Name</el-text>
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <div style="text-align: left;">
+              <el-text size="large">{{ model_name }}</el-text>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="line-item">
+          <el-col :span="5">
+            <div style="text-align: left;">
+              <el-text size="large">Stream Name</el-text>
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <div style="text-align: left;">
+              <el-text size="large">{{ stream_name }}</el-text>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="line-item">
+          <el-col :span="5">
+            <div style="text-align: left;">
+              <el-text size="large">Input Speed</el-text>
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <div style="text-align: left;">
+              <el-text size="large"> {{ input_fps }} (FPS)</el-text>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="line-item">
+          <el-col :span="5">
+            <div style="text-align: left;">
+              <el-text size="large">Infer Speed</el-text>
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <div style="text-align: left;">
+              <el-text size="large">{{ infer_fps }} (FPS)</el-text>
+            </div>
+          </el-col>
+        </el-row>
+        <div v-if="is_secure == 1">
+          <el-row :gutter="20" class="line-item">
+            <el-col :span="5">
               <div style="text-align: left;">
-                <el-text size="large">Pipeline ID</el-text>
+                <el-text size="large">RTMR[0]</el-text>
               </div>
             </el-col>
             <el-col :span="19">
               <div style="text-align: left;">
-                {{ pipeline_id }}
+                <el-text size="large">{{ rtmr_0 }}</el-text>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="line-item">
             <el-col :span="5">
               <div style="text-align: left;">
-                <el-text size="large">Model Name</el-text>
+                <el-text size="large">RTMR[1]</el-text>
               </div>
             </el-col>
             <el-col :span="19">
               <div style="text-align: left;">
-                <el-text size="large">{{ model_name }}</el-text>
+                <el-text size="large">{{ rtmr_1 }}</el-text>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="line-item">
             <el-col :span="5">
               <div style="text-align: left;">
-                <el-text size="large">Stream Name</el-text>
+                <el-text size="large">RTMR[2]</el-text>
               </div>
             </el-col>
             <el-col :span="19">
               <div style="text-align: left;">
-                <el-text size="large">{{ stream_name }}</el-text>
+                <el-text size="large">{{ rtmr_2 }}</el-text>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="line-item">
             <el-col :span="5">
               <div style="text-align: left;">
-                <el-text size="large">Input Speed</el-text>
+                <el-text size="large">RTMR[3]</el-text>
               </div>
             </el-col>
             <el-col :span="19">
               <div style="text-align: left;">
-                <el-text size="large"> {{ input_fps }} (FPS)</el-text>
+                <el-text size="large">{{ rtmr_3 }}</el-text>
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="20" class="line-item">
-            <el-col :span="5">
-              <div style="text-align: left;">
-                <el-text size="large">Infer Speed</el-text>
-              </div>
-            </el-col>
-            <el-col :span="19">
-              <div style="text-align: left;">
-                <el-text size="large">{{ infer_fps }} (FPS)</el-text>
-              </div>
-            </el-col>
-          </el-row>
+        </div>
       </div>
-    </el-col>
-    <el-col :span="4">
     </el-col>
     <el-col :span="4">
       <div class="grid-content" >
@@ -80,74 +128,6 @@
       </div>
     </el-col>
   </el-row>
-  <div v-if="is_secure == 1">
-    <div class="grid-content">
-      <el-row :gutter="20" class="line-item">
-        <el-col :span="4">
-          <div style="text-align: left;">
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div style="text-align: left;">
-            <el-text size="large">RTMR[0]</el-text>
-          </div>
-        </el-col>
-        <el-col :span="17">
-          <div style="text-align: left;">
-            <el-text size="large">{{ rtmr_0 }}</el-text>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" class="line-item">
-        <el-col :span="4">
-          <div style="text-align: left;">
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div style="text-align: left;">
-            <el-text size="large">RTMR[1]</el-text>
-          </div>
-        </el-col>
-        <el-col :span="17">
-          <div style="text-align: left;">
-            <el-text size="large">{{ rtmr_1 }}</el-text>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" class="line-item">
-        <el-col :span="4">
-          <div style="text-align: left;">
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div style="text-align: left;">
-            <el-text size="large">RTMR[2]</el-text>
-          </div>
-        </el-col>
-        <el-col :span="17">
-          <div style="text-align: left;">
-            <el-text size="large">{{ rtmr_2 }}</el-text>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" class="line-item">
-        <el-col :span="4">
-          <div style="text-align: left;">
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div style="text-align: left;">
-            <el-text size="large">RTMR[3]</el-text>
-          </div>
-        </el-col>
-        <el-col :span="17">
-          <div style="text-align: left;">
-            <el-text size="large">{{ rtmr_3 }}</el-text>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
