@@ -45,7 +45,7 @@ export const initStore = (app: App<Element>) => {
 
 let eventSource: EventSource | null = null;
 let retries = 0;
-const reg=/sec/;
+const reg=/keda/;
 
 export const refreshPipeline = async (pipeline_db_url:string=store.state.pipeline_db_server,
     ws_server_url:string=store.state.websocket_server,
@@ -62,7 +62,7 @@ export const refreshPipeline = async (pipeline_db_url:string=store.state.pipelin
     let data_new = [];
     let urls = [];
     for (let pipeline of data) {
-      if (reg.test(pipeline.stream_name)) {
+      if (!reg.test(pipeline.stream_name)) {
         console.log(pipeline.stream_name)
         urls.unshift(ws_server_url + "/" + pipeline.pipeline_id);
         data_new.unshift(pipeline);
