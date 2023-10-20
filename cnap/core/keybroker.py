@@ -25,9 +25,9 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 LOG = logging.getLogger(__name__)
 
 # Set the connection timeout to 10s
-TIMEOUT = 10
+TIMEOUT = 30
 # Set the connection retry times to 3
-RETRY_TIMES=3
+RETRY_TIMES=15
 # Set http connection succesfull code
 HTTP_OK = [200]
 
