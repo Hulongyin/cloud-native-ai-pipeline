@@ -1,3 +1,13 @@
+FROM python:3.9-slim AS downloader
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssdmobilenet_int8_pretrained_model_combinedNMS_s8.pb
+
 FROM intel/oneapi-aikit:2023.1.1-devel-ubuntu22.04 AS runner
 
 RUN useradd --create-home appuser
@@ -12,7 +22,11 @@ ARG pip_mirror
 
 COPY ./cnap /cnap
 
-RUN chown -R appuser:appuser /cnap
+COPY --from=downloader \
+    /ssdmobilenet_int8_pretrained_model_combinedNMS_s8.pb \
+    /demo/model/model.pb
+
+RUN chown -R appuser:appuser /demo /cnap
 
 ENV PYTHONPATH="/cnap:${PYTHONPATH}"
 
