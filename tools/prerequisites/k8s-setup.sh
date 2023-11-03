@@ -93,6 +93,16 @@ install_container() {
     done
 }
 
+containerd_proxy() {
+    mkdir -p /etc/systemd/system/containerd.service.d/
+    tee /etc/systemd/system/containerd.service.d/http-proxy.conf <<EOF
+[Service]
+Environment="HTTP_PROXY=http://proxy-dmz.intel.com:912"
+Environment="HTTPS_PROXY=http://proxy-dmz.intel.com:912"
+Environment="NO_PROXY=localhost,.intel.com,intel.com"
+EOF
+}
+
 configure_container() {
     commands=(
         "mkdir -p /etc/containerd"
@@ -108,7 +118,7 @@ configure_container() {
 }
 
 install_kubernetes() {
-    read -rp "Enter Kubernetes version (default: 1.28.2-00): " k8s_version
+    # read -rp "Enter Kubernetes version (default: 1.28.2-00): " k8s_version
     k8s_version=${k8s_version:-"1.28.2-00"}
 
     commands=(
@@ -121,19 +131,11 @@ install_kubernetes() {
 }
 
 initialize_cluster() {
-    read -rp "Enter Pod Network CIDR (default: 10.244.0.0/16): " pod_network_cidr
+    # read -rp "Enter Pod Network CIDR (default: 10.244.0.0/16): " pod_network_cidr
+    k8s_version="1.28.2"
     pod_network_cidr=${pod_network_cidr:-"10.244.0.0/16"}
-    command="kubeadm init --pod-network-cidr=${pod_network_cidr}"
+    command="kubeadm init --pod-network-cidr=${pod_network_cidr} --kubernetes-version=${k8s_version}"
     output=$(execute_command "$command" 1)
-
-    commands=(
-        "mkdir -p $HOME/.kube"
-        "cp /etc/kubernetes/admin.conf $HOME/.kube/config"
-        "chown $(id -u):$(id -g) $HOME/.kube/config"
-    )
-    for command in "${commands[@]}"; do
-        execute_command "$command"
-    done
     
     join_command=$(echo "$output" | grep -A 1 "kubeadm join" | tr -d \\ | tr -d '\n')
     if [[ -z $join_command ]]; then
@@ -149,6 +151,16 @@ initialize_cluster() {
     echo "Token: $token"
     echo "Certificate Hash: $cert_hash"
     
+    commands=(
+        "mkdir -p $HOME/.kube"
+        "cp /etc/kubernetes/admin.conf $HOME/.kube/config"
+        "chown $(id -u):$(id -g) $HOME/.kube/config"
+        "kubectl taint nodes --all node-role.kubernetes.io/control-plane-"
+    )
+    for command in "${commands[@]}"; do
+        execute_command "$command"
+    done
+
     enable_kubectl_autocompletion
     
     echo "Cluster initialized with Pod Network CIDR $pod_network_cidr"
@@ -176,12 +188,12 @@ enable_kubectl_autocompletion() {
 setup_cluster() {
     echo "1: Initialize as Controller Node"
     echo "2: Join as Worker Node"
-    read -rp "Enter choice (default: 1): " choice
-    choice=${choice:-'1'}
+    # read -rp "Enter setup_choice (default: 1): " setup_choice
+    setup_choice=${setup_choice:-'1'}
 
-    if [[ $choice == '1' ]]; then
+    if [[ $setup_choice == '1' ]]; then
         initialize_cluster
-    elif [[ $choice == '2' ]]; then
+    elif [[ $setup_choice == '2' ]]; then
         join_cluster
     else
         echo "Invalid choice. Exiting."
@@ -190,7 +202,7 @@ setup_cluster() {
 }
 
 install_cni() {
-    read -rp "Do you want to setup a Container Network Interface (CNI)? Enter 'yes' to setup or 'no' to skip (default: yes): " cni_choice
+    # read -rp "Do you want to setup a Container Network Interface (CNI)? Enter 'yes' to setup or 'no' to skip (default: yes): " cni_choice
     cni_choice=${cni_choice:-"yes"}
 
     if [[ $cni_choice == 'no' ]]; then
@@ -201,8 +213,8 @@ install_cni() {
     echo "Choose a CNI plugin:"
     echo "1: Calico"
     echo "2: Flannel"
-    read -rp "Enter choice (default: 1): " cni_plugin_choice
-    cni_plugin_choice=${cni_plugin_choice:-'1'}
+    # read -rp "Enter choice (default: 1): " cni_plugin_choice
+    cni_plugin_choice=${cni_plugin_choice:-'2'}
     
     if [[ $cni_plugin_choice == '1' ]]; then
         calico_url="https://projectcalico.docs.tigera.io/manifests/calico.yaml"
@@ -236,7 +248,8 @@ main_menu() {
         echo "7: setup_cluster"
         echo "8: install_cni"
         echo "9: Exit"
-        read -rp "Enter step number: " choice
+        # read -rp "Enter step number: " choice
+        choice=${choice:-'0'}
 
         case $choice in
             0)
@@ -244,6 +257,7 @@ main_menu() {
                 configure_kernel
                 install_pre_requisites
                 install_container
+                containerd_proxy
                 configure_container
                 install_kubernetes
                 setup_cluster
