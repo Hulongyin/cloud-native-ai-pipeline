@@ -2,6 +2,9 @@
 
 set -e
 
+IMAGE_REGISTRY="cnap"
+IMGAE_TAG="latest"
+
 configure_kernel() {
     tee /etc/modules-load.d/containerd.conf <<EOF
 overlay
@@ -9,7 +12,6 @@ br_netfilter
 EOF
     modprobe overlay
     modprobe br_netfilter
-    sysctl --system
 }
 
 install_pre_requisites() {
@@ -23,7 +25,7 @@ install_pre_requisites() {
     apt-get update
 }
 
-install_container() {
+install_containerd_docker() {
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 }
 
@@ -73,19 +75,28 @@ configure_container() {
     systemctl daemon-reload
     systemctl restart containerd
     systemctl enable containerd
+    sleep 2
+
     systemctl restart docker
     systemctl enable docker
+    sleep 2
 }
 
-pull_image() {
-    docker pull hulongyin/cnap-inference:2023WW44.4
-    docker pull hulongyin/cnap-streaming:2023WW44.4
+build_cnap_images() {
+    git clone -b demo https://github.com/intel/cloud-native-ai-pipeline.git
+    cd cloud-native-ai-pipeline
+    ./tools/docker_image_manager.sh -a build -r ${IMAGE_REGISTRY} -g ${IMGAE_TAG} -c cnap-streaming
+    ./tools/docker_image_manager.sh -a build -r ${IMAGE_REGISTRY} -g ${IMGAE_TAG} -c cnap-inference
+}
+
+pull_redis_offical_image() {
     docker pull redis:7.0
 }
 
 configure_kernel
 install_pre_requisites
-install_container
+install_containerd_docker
 containerd_docker_proxy
 configure_container
-pull_image
+build_cnap_images
+pull_redis_offical_image

@@ -4,7 +4,7 @@ set -e
 
 initialize_cluster() {
     swapoff -a
-    systemctl restart containerd
+    systemctl start containerd
 
     # read -rp "Enter Pod Network CIDR (default: 10.244.0.0/16): " pod_network_cidr
     k8s_version="1.28.2"
