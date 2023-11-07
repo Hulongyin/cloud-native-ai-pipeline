@@ -61,15 +61,15 @@ env:
   - name: PROVIDER_TYPE
     value: "file"
   - name: PROVIDER_NAME
-    value: "classroom"
+    value: "detection-with-amx"
   - name: PROVIDER_PATHNAME
-    value: "classroom.mp4"
+    value: "store-aisle-detection.mp4"
   - name: INFER_FRAMEWORK
     value: "tensorflow"
   - name: INFER_TARGET
     value: "object-detection"
   - name: INFER_DEVICE
-    value: "cpu"
+    value: "cpu-amx"
   - name: INFER_MODEL_NAME
     value: "ssdmobilenet"
   - name: INFER_MODEL_VERSION
