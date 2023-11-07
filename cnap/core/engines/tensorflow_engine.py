@@ -199,14 +199,11 @@ class TensorFlowPreprocessor(Preprocessor):
 
         # return input_tensor.numpy()
 
-        start = time.time()
         input_image = input_tensor.numpy()
 
         with self.preprocess_graph.as_default():
             input_image = self.pre_sess.run(
                 self.pre_output, {self.pre_input: input_image})
-        end = time.time()
-        LOG.info("Preprocess time: %fms", (end - start) * 1000)
         return input_image
 
 

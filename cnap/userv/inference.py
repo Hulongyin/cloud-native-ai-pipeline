@@ -455,6 +455,8 @@ class InferenceTask(MicroServiceTask):
 
         metrics_manager.set_gauge('infer_fps', infer_fps_sum)
         metrics_manager.set_gauge('drop_fps', drop_fps_sum)
+        LOG.debug("infer_fps: %d", infer_fps_sum)
+        LOG.debug("drop_fps: %d", drop_fps_sum)
 
     def reset_frame_counts(self) -> None:
         """Reset the frame counts for the next calculation window."""
@@ -513,8 +515,9 @@ class InferenceTask(MicroServiceTask):
             #image = cv2.imdecode(frame.raw, cv2.IMREAD_COLOR)
 
             # 4. Run inference on the frame
-            prediction, _ = self.inference_engine.predict(frame.raw)
+            prediction, predict_latency = self.inference_engine.predict(frame.raw)
             frame.raw = prediction
+            LOG.info("Predict latency: %fms", predict_latency * 1000)
 
             time_after_predict = time.time()
             frame.timestamp_infer_end = time_after_predict
