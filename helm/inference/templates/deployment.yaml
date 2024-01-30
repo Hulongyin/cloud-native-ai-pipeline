@@ -32,12 +32,22 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- toYaml .Values.env | nindent 10 }}
+            
+            {{- if .Values.tee }}
+            - name: EXECUTION_ENVIRONMENT
+              value: "trusted"
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.tee }}
+          volumeMounts:
+            - name: eventlog-path
+              mountPath: /run/ccnp-eventlog
+          {{- end }}
       initContainers:
         - name: init-{{ .Chart.Name }}
           image: busybox:1.28
@@ -66,4 +76,10 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tee }}
+      volumes:
+      - name: eventlog-path
+        hostPath:
+          path: /run/ccnp-eventlog
       {{- end }}
